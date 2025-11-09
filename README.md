@@ -67,34 +67,56 @@ git clone https://github.com/zeinreallycancreate/cityOS---vehicle-tracking---per
 cd cityOS---vehicle-tracking---person-tracking
 ```
 
-2. **Check dependencies** (optional but recommended):
+2. **Run the installation script** (recommended):
+```bash
+./install.sh
+```
+
+This script will:
+- Detect if your Python is externally managed (common on modern systems)
+- Automatically create a virtual environment if needed
+- Install all required dependencies
+- Verify the installation
+- Create convenient run scripts
+
+**If you get "externally managed" errors**, this is normal on modern Linux systems. The install script handles this automatically by creating a virtual environment.
+
+**Alternative: Manual Installation**
+
+If you prefer to install manually:
+
+a. **Check dependencies** (optional but recommended):
 ```bash
 python3 check_dependencies.py
 ```
-This will verify that all required packages can be installed on your system.
 
-3. **Install dependencies**:
+b. **For externally managed systems** (Python 3.11+ on Debian/Ubuntu):
+```bash
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip3 install -r requirements.txt
+```
+
+c. **For older systems or if virtual environment isn't needed**:
 ```bash
 pip3 install -r requirements.txt
 ```
 
-If you encounter permission errors, you may need to use:
+If you encounter permission errors:
 ```bash
 pip3 install --user -r requirements.txt
 ```
 
-Or on some systems:
-```bash
-sudo pip3 install -r requirements.txt
-```
-
-4. **Verify installation**:
+d. **Verify installation**:
 ```bash
 python3 check_dependencies.py
 ```
 All checks should pass before proceeding.
 
-5. **Run initial setup**:
+3. **Run initial setup**:
 ```bash
 python3 setup.py
 ```
@@ -104,6 +126,17 @@ The setup wizard will guide you through:
 - Known locations (home, work, etc.)
 - Schedule patterns (work hours, routines)
 - System settings (GPS interval, data retention)
+
+**Note**: If you used the install script and created a virtual environment, make sure to activate it before running setup:
+```bash
+source venv/bin/activate
+python3 setup.py
+```
+
+Or use the convenience script:
+```bash
+./run.sh setup.py
+```
 
 ### Optional: Google Maps API Key
 
@@ -121,6 +154,16 @@ For enhanced location context (nearby places, addresses):
 **Note**: The system works fully without an API key, just without nearby places data.
 
 ## Usage
+
+**Important**: If you used a virtual environment during installation, remember to activate it before running commands:
+```bash
+source venv/bin/activate
+```
+
+Or use the convenience script (if created):
+```bash
+./run.sh main.py start
+```
 
 ### Start Tracking
 ```bash
@@ -555,26 +598,65 @@ All data is stored locally on your Raspberry Pi:
 
 ## Troubleshooting
 
+### "Externally Managed" Python Error
+
+If you see an error like:
+```
+error: externally-managed-environment
+This environment is externally managed
+```
+
+This is a security feature in modern Python installations (Python 3.11+ on Debian/Ubuntu). **Solution**:
+
+1. **Use the install script** (recommended):
+```bash
+./install.sh
+```
+
+2. **Or manually create a virtual environment**:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
+3. **Then always activate the virtual environment before running**:
+```bash
+source venv/bin/activate
+python3 main.py
+```
+
 ### ModuleNotFoundError on Line 351 (or similar)
 
 If you get a `ModuleNotFoundError` when running `main.py`:
 
-1. **Check if dependencies are installed**:
+1. **If using virtual environment, make sure it's activated**:
+```bash
+source venv/bin/activate
+```
+
+2. **Check if dependencies are installed**:
 ```bash
 python3 check_dependencies.py
 ```
 
-2. **Install missing dependencies**:
+3. **Install missing dependencies**:
 ```bash
+# If using virtual environment (recommended)
+source venv/bin/activate
 pip3 install -r requirements.txt
+
+# Or if not using virtual environment
+pip3 install --user -r requirements.txt
 ```
 
-3. **Common issues**:
-   - **Permission denied**: Use `pip3 install --user -r requirements.txt`
+4. **Common issues**:
+   - **Externally managed**: See section above, use virtual environment
+   - **Permission denied**: Use virtual environment or `pip3 install --user -r requirements.txt`
    - **Old pip version**: Upgrade pip with `pip3 install --upgrade pip`
    - **Python version**: Ensure Python 3.7+ is installed (`python3 --version`)
 
-4. **Install dependencies individually** if batch install fails:
+5. **Install dependencies individually** if batch install fails:
 ```bash
 pip3 install flask
 pip3 install googlemaps

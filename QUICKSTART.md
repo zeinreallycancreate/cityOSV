@@ -2,13 +2,38 @@
 
 ## First Time Setup
 
-1. **Check dependencies (recommended):**
+1. **Run the installation script** (recommended):
+   ```bash
+   ./install.sh
+   ```
+   
+   This automatically handles:
+   - Detecting externally managed Python (common on modern systems)
+   - Creating a virtual environment if needed
+   - Installing all dependencies
+   - Verifying the installation
+   
+   **If you see "externally managed" error**, the script handles it automatically!
+
+2. **Alternative: Manual setup**
+
+   a. **Check dependencies (recommended):**
    ```bash
    python3 check_dependencies.py
    ```
    This will show which packages need to be installed.
 
-2. **Install dependencies:**
+   b. **For modern systems (Python 3.11+):**
+   ```bash
+   # Create virtual environment
+   python3 -m venv venv
+   source venv/bin/activate
+   
+   # Install dependencies
+   pip3 install -r requirements.txt
+   ```
+   
+   c. **For older systems:**
    ```bash
    pip3 install -r requirements.txt
    ```
@@ -26,7 +51,12 @@
 
 4. **Run setup wizard:**
    ```bash
+   # If using virtual environment
+   source venv/bin/activate
    python3 setup.py
+   
+   # Or with convenience script
+   ./run.sh setup.py
    ```
    
    Enter your information:
@@ -42,6 +72,13 @@
    ```
 
 ## Daily Use
+
+**Remember**: If you used a virtual environment, activate it first:
+```bash
+source venv/bin/activate
+```
+
+Or use the convenience script: `./run.sh main.py <command>`
 
 ### Start Tracking (Runs in Background)
 ```bash
@@ -173,8 +210,13 @@ The INSANE prediction engine analyzes:
 ```bash
 crontab -e
 ```
-Add:
+Add (adjust path as needed):
 ```
+# If using virtual environment
+@reboot cd /path/to/repo && source venv/bin/activate && python3 main.py start &
+@reboot cd /path/to/repo && source venv/bin/activate && python3 main.py web &
+
+# Or without virtual environment
 @reboot cd /path/to/repo && python3 main.py start &
 @reboot cd /path/to/repo && python3 main.py web &
 ```
@@ -195,22 +237,49 @@ rm data/gps_log_2023-*.json  # Delete 2023 data
 
 ## Troubleshooting
 
+### "Externally Managed" Error
+
+If you see:
+```
+error: externally-managed-environment
+```
+
+**This is normal on modern systems!** Solutions:
+
+1. **Use the install script** (easiest):
+   ```bash
+   ./install.sh
+   ```
+
+2. **Or create virtual environment manually**:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   pip3 install -r requirements.txt
+   ```
+
+3. **Always activate before use**:
+   ```bash
+   source venv/bin/activate
+   ```
+
 ### ModuleNotFoundError or Import Errors
 
 If you see `ModuleNotFoundError` when running the system:
 
 ```bash
+# If using virtual environment, activate it first!
+source venv/bin/activate
+
 # Check what's missing
 python3 check_dependencies.py
 
 # Install all dependencies
 pip3 install -r requirements.txt
-
-# If permission denied
-pip3 install --user -r requirements.txt
 ```
 
 **Common fixes:**
+- **Externally managed**: Use virtual environment (see above)
 - Upgrade pip: `pip3 install --upgrade pip`
 - Check Python version: `python3 --version` (need 3.7+)
 - Install individually if batch fails (see README.md)
