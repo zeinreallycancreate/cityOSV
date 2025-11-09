@@ -8,14 +8,47 @@ Works offline - queues operations when WiFi unavailable
 import sys
 import time
 import os
+
+# Check Python version
+if sys.version_info < (3, 7):
+    print("\n" + "=" * 80)
+    print("ERROR: Python 3.7 or higher is required")
+    print("=" * 80)
+    print(f"\nCurrent version: Python {sys.version_info.major}.{sys.version_info.minor}")
+    print("\nPlease upgrade Python or use a compatible version.")
+    print("=" * 80 + "\n")
+    sys.exit(1)
+
 import signal
 from datetime import datetime
 import logging
 
-from gps_tracker import GPSTracker
-from ai_processor import AIProcessor
-from profile_manager import ProfileManager
-from network_manager import NetworkManager
+# Check for required dependencies before importing custom modules
+try:
+    from gps_tracker import GPSTracker
+    from ai_processor import AIProcessor
+    from profile_manager import ProfileManager
+    from network_manager import NetworkManager
+except ModuleNotFoundError as e:
+    print("\n" + "=" * 80)
+    print("ERROR: Missing required dependencies")
+    print("=" * 80)
+    print(f"\nModule not found: {e.name if hasattr(e, 'name') else str(e)}")
+    print("\nPlease install the required dependencies by running:")
+    print("  pip3 install -r requirements.txt")
+    print("\nOr install them individually:")
+    print("  pip3 install flask googlemaps numpy pandas scikit-learn")
+    print("\n" + "=" * 80 + "\n")
+    sys.exit(1)
+except ImportError as e:
+    print("\n" + "=" * 80)
+    print("ERROR: Import failed")
+    print("=" * 80)
+    print(f"\n{e}")
+    print("\nPlease ensure all required dependencies are installed:")
+    print("  pip3 install -r requirements.txt")
+    print("\n" + "=" * 80 + "\n")
+    sys.exit(1)
 
 
 class VehicleTrackingSystem:

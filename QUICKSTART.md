@@ -2,12 +2,29 @@
 
 ## First Time Setup
 
-1. **Install dependencies:**
+1. **Check dependencies (recommended):**
+   ```bash
+   python3 check_dependencies.py
+   ```
+   This will show which packages need to be installed.
+
+2. **Install dependencies:**
    ```bash
    pip3 install -r requirements.txt
    ```
+   
+   If you get permission errors:
+   ```bash
+   pip3 install --user -r requirements.txt
+   ```
 
-2. **Run setup wizard:**
+3. **Verify installation:**
+   ```bash
+   python3 check_dependencies.py
+   ```
+   All checks should pass (✓).
+
+4. **Run setup wizard:**
    ```bash
    python3 setup.py
    ```
@@ -18,7 +35,7 @@
    - Schedule patterns
    - System settings
 
-3. **Optional: Add Google Maps API key**
+5. **Optional: Add Google Maps API key**
    Edit `config.json` and add:
    ```json
    "google_maps_api_key": "YOUR_API_KEY"
@@ -177,6 +194,26 @@ rm data/gps_log_2023-*.json  # Delete 2023 data
 ```
 
 ## Troubleshooting
+
+### ModuleNotFoundError or Import Errors
+
+If you see `ModuleNotFoundError` when running the system:
+
+```bash
+# Check what's missing
+python3 check_dependencies.py
+
+# Install all dependencies
+pip3 install -r requirements.txt
+
+# If permission denied
+pip3 install --user -r requirements.txt
+```
+
+**Common fixes:**
+- Upgrade pip: `pip3 install --upgrade pip`
+- Check Python version: `python3 --version` (need 3.7+)
+- Install individually if batch fails (see README.md)
 
 ### No GPS Data
 - Check GPS module connection

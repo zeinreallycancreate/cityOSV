@@ -67,12 +67,34 @@ git clone https://github.com/zeinreallycancreate/cityOS---vehicle-tracking---per
 cd cityOS---vehicle-tracking---person-tracking
 ```
 
-2. **Install dependencies**:
+2. **Check dependencies** (optional but recommended):
+```bash
+python3 check_dependencies.py
+```
+This will verify that all required packages can be installed on your system.
+
+3. **Install dependencies**:
 ```bash
 pip3 install -r requirements.txt
 ```
 
-3. **Run initial setup**:
+If you encounter permission errors, you may need to use:
+```bash
+pip3 install --user -r requirements.txt
+```
+
+Or on some systems:
+```bash
+sudo pip3 install -r requirements.txt
+```
+
+4. **Verify installation**:
+```bash
+python3 check_dependencies.py
+```
+All checks should pass before proceeding.
+
+5. **Run initial setup**:
 ```bash
 python3 setup.py
 ```
@@ -532,6 +554,36 @@ All data is stored locally on your Raspberry Pi:
 - Complete control over your data
 
 ## Troubleshooting
+
+### ModuleNotFoundError on Line 351 (or similar)
+
+If you get a `ModuleNotFoundError` when running `main.py`:
+
+1. **Check if dependencies are installed**:
+```bash
+python3 check_dependencies.py
+```
+
+2. **Install missing dependencies**:
+```bash
+pip3 install -r requirements.txt
+```
+
+3. **Common issues**:
+   - **Permission denied**: Use `pip3 install --user -r requirements.txt`
+   - **Old pip version**: Upgrade pip with `pip3 install --upgrade pip`
+   - **Python version**: Ensure Python 3.7+ is installed (`python3 --version`)
+
+4. **Install dependencies individually** if batch install fails:
+```bash
+pip3 install flask
+pip3 install googlemaps
+pip3 install numpy
+pip3 install pandas
+pip3 install scikit-learn
+pip3 install geopy
+pip3 install requests
+```
 
 ### GPS Not Working
 - Check GPS module connection
