@@ -2,8 +2,6 @@
 # Installation script for Vehicle Tracking System
 # Handles externally managed Python environments by creating a virtual environment
 
-set -e  # Exit on error
-
 echo "========================================================================"
 echo "Vehicle Tracking System - Installation Script"
 echo "========================================================================"
@@ -74,17 +72,47 @@ fi
 # Upgrade pip
 echo ""
 echo "Upgrading pip..."
-$PIP_CMD install --upgrade pip
+if ! $PIP_CMD install --upgrade pip --default-timeout=100; then
+    echo "Warning: Failed to upgrade pip, continuing with current version..."
+fi
 
 # Install requirements
 echo ""
 echo "Installing dependencies from requirements.txt..."
-$PIP_CMD install -r requirements.txt
+echo "This may take a few minutes..."
+if ! $PIP_CMD install -r requirements.txt --default-timeout=100; then
+    echo ""
+    echo "========================================================================"
+    echo "ERROR: Failed to install dependencies"
+    echo "========================================================================"
+    echo ""
+    echo "This could be due to:"
+    echo "  1. Network connectivity issues - check your internet connection"
+    echo "  2. PyPI server timeout - try again later"
+    echo "  3. Missing system dependencies - see error messages above"
+    echo ""
+    echo "To retry installation:"
+    if [ -d "venv" ]; then
+        echo "  source venv/bin/activate"
+        echo "  pip3 install -r requirements.txt"
+    else
+        echo "  pip3 install -r requirements.txt"
+    fi
+    echo ""
+    echo "For individual package installation, see README.md"
+    exit 1
+fi
 
 # Verify installation
 echo ""
 echo "Verifying installation..."
-$PYTHON_CMD check_dependencies.py
+if ! $PYTHON_CMD check_dependencies.py; then
+    echo ""
+    echo "Warning: Some dependencies may not have installed correctly."
+    echo "Please review the error messages above and try installing"
+    echo "missing packages individually."
+    echo ""
+fi
 
 # Create activation script
 if [ -d "venv" ]; then
