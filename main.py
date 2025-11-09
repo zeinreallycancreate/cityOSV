@@ -245,6 +245,7 @@ Commands:
     start       - Start the tracking system (default)
     learn       - Run AI learning mode on historical data
     status      - Show system status
+    web         - Start web server on localhost port 80
     help        - Show this help message
 
 Examples:
@@ -252,6 +253,8 @@ Examples:
     python main.py start        # Start tracking
     python main.py learn        # Analyze historical data
     python main.py status       # Show system status
+    python main.py web          # Start web interface
+    python main.py web 8080     # Start web interface on port 8080
 """)
 
 
@@ -316,6 +319,19 @@ def main():
     
     if command == 'status':
         show_status()
+        return
+    
+    if command == 'web':
+        # Start web server
+        from web_server import start_server
+        port = 80
+        if len(sys.argv) > 2:
+            try:
+                port = int(sys.argv[2])
+            except ValueError:
+                print("Invalid port number")
+                sys.exit(1)
+        start_server(port=port)
         return
     
     # Initialize system

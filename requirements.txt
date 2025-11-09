@@ -5,3 +5,4 @@ numpy==1.24.3
 pandas==2.0.3
 googlemaps==4.10.0
 requests==2.31.0
+flask==3.0.0
